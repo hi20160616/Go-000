@@ -1,4 +1,4 @@
-package service
+package service_handler
 
 import (
 	"context"

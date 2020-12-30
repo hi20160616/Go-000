@@ -1,16 +1,10 @@
-## Week04 作业题目
+> 按照自己的构想，写一个项目满足基本的目录结构和工程，代码需要包含对数据层、业务层、API 注册，以及 main 函数对于服务的注册和启动，信号处理，使用 Wire 构建依赖。可以使用自己熟悉的框架。
 
-> 按照自己的构想，写一个项目，满足基本的目录结构和工程， 代码需要包含对数据层、业务层、API 注册，以及 main 函数对于服务的注册和启动， 信号处理，使用 Wire 构建依赖。可以使用自己熟悉的框架。
+## Prerequisites
 
-reference repo: https://github.com/AngelovLee/Go-001/tree/main/Week04
+### gRPC
 
-## Implements
-
-### Prerequisites
-
-#### gRPC
-
-https://grpc.io/docs/languages/go/quickstart/#prerequisites
+Reference: https://grpc.io/docs/languages/go/quickstart/#prerequisites
 
 ```
 brew install protobuf
@@ -20,18 +14,56 @@ go get google.golang.org/protobuf/cmd/protoc-gen-go \
 go install google.golang.org/protobuf/cmd/protoc-gen-go
 ```
 
-`export PATH="$PATH:$(go env GOPATH)/bin"` append to `.zshrc`
+copy `export PATH="$PATH:$(go env GOPATH)/bin"` append to `.zshrc`
 
-After prerequistes prepared, coding and run below:
-
+reload iTerm2 and run below to generate pb files:
 ```
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    api/foobar/v1/foobar.proto
+    api/helloworld/v1/helloworld.proto
 ```
 
-#### wire
+### wire
+
+Reference: https://github.com/google/wire
 
 ```
 go get github.com/google/wire/cmd/wire
+```
+
+
+## Thanks
+
+repo: https://github.com/AngelovLee/Go-001/tree/main/Week04  
+
+
+
+## Conclusion
+
+Test passed and log is below ↓
+
+Server:  
+```
+➜  helloworld git:(main) ✗ make build
+cd cmd/greeter_server && go build -o ../../bin/greeter_server && cd ../../ \
+		&& cd cmd/greeter_client && go build -o ../../bin/greeter_client && cd ../../
+➜  helloworld git:(main) ✗ make run
+./bin/greeter_server
+2020/12/30 17:45:37
+grpc server start at: :50051
+2020/12/30 17:45:41 Hi there is data package!
+2020/12/30 17:45:56 Hi there is data package!
+^C
+2020/12/30 17:47:21 signal caught: interrupt, reday to quit...
+2020/12/30 17:47:21 grpc server gracefully stopped.
+```
+
+Client:
+```
+➜  helloworld git:(main) ✗ make test1
+./bin/greeter_client
+2020/12/30 17:45:41 Greeting: hello pitt, Server recived your message: hi guy~ ID: 100
+➜  helloworld git:(main) ✗ make test2
+./bin/greeter_client gopher
+2020/12/30 17:45:56 Greeting: hello gopher, Server recived your message: hi guy~ ID: 100
 ```

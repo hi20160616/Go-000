@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	pb "github.com/hi20160616/Go-000/Week04/helloworld/api/helloworld/v1"
+	pb "github.com/hi20160616/Go-000/Week04/homework/api/helloworld/v1"
 	"google.golang.org/grpc"
 )
 
@@ -29,15 +29,14 @@ func main() {
 	if len(os.Args) > 1 {
 		name = os.Args[1]
 	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
+
+	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name, Msg: "hi guy~"})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
-	r, err = c.SayHelloAgain(ctx, &pb.HelloRequest{Name: name})
-	if err != nil {
-		log.Fatalf("could not greet: %v", err)
-	}
+
 	log.Printf("Greeting: %s", r.GetMessage())
 }
