@@ -2,7 +2,7 @@
 
 ## Tree
 
-```
+```shell
 .
 ├── Makefile
 ├── README.md
