@@ -37,7 +37,7 @@ func main() {
 	// catch signals
 	g.Go(func() error {
 		sigs := make(chan os.Signal, 1)
-		signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+		signal.Notify(sigs, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
 		select {
 		case sig := <-sigs:
 			fmt.Println("")
