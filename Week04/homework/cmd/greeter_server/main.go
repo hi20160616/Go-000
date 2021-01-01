@@ -28,7 +28,10 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	g, ctx := errgroup.WithContext(ctx)
 
-	g.Go(func() error { return s.Start(ctx) })
+	g.Go(func() error {
+		defer cancel()
+		return s.Start(ctx)
+	})
 
 	g.Go(func() error {
 		sigs := make(chan os.Signal, 1)
@@ -37,8 +40,11 @@ func main() {
 		case sig := <-sigs:
 			fmt.Println()
 			log.Printf("signal caught: %s, reday to quit...", sig.String())
-			cancel()
+			defer cancel()
+			s.Stop(ctx)
 		case <-ctx.Done():
+			defer cancel()
+			s.Stop(ctx)
 			return ctx.Err()
 		}
 		return nil
