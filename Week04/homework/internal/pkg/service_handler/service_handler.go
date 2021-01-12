@@ -25,10 +25,12 @@ func (s *Server) Start(ctx context.Context) error {
 	}
 	log.Printf("\ngrpc server start at: %s", s.address)
 
-	go func() {
-		<-ctx.Done()
-		s.GracefulStop()
-		log.Printf("grpc server gracefully stopped.")
-	}()
 	return s.Serve(lis)
+}
+
+func (s *Server) Stop(ctx context.Context) error {
+	s.GracefulStop()
+	log.Printf("grpc server gracefully stopped.")
+
+	return nil
 }
