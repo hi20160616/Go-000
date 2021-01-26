@@ -18,9 +18,15 @@ const (
 	address = ":12345"
 )
 
+func connWrite(conn net.Conn, ch <-chan string) {
+	for msg := range ch {
+		fmt.Fprintln(conn, msg)
+	}
+}
+
 func main() {
-	inchan := make(chan string)
-	outchan := make(chan string)
+	sendChan := make(chan string)
+	reciveChan := make(chan string)
 	conn, err := net.Dial("tcp", address)
 	if err != nil {
 		fmt.Println(err)
@@ -37,7 +43,6 @@ func main() {
 			fmt.Println()
 			log.Printf("signal caught: %s, ready to quit...", sig.String())
 			defer cancel()
-			// TODO: stop action
 			return nil
 		case <-ctx.Done():
 			defer cancel()
@@ -51,7 +56,19 @@ func main() {
 		for {
 			fmt.Print(">> ")
 			input, _ := bufio.NewReader(os.Stdin).ReadString('\n')
-			inchan <- input
+			sendChan <- input
+			switch strings.TrimSpace(string(input)) {
+			case "STOP":
+				fmt.Println("Send stop signal to TCP Server...")
+				sendChan <- "0"
+			case "RESTART":
+				fmt.Println("Send restart signal to TCP Server...")
+				sendChan <- "6"
+			case "EXIT":
+				fmt.Println("TCP Client exiting...")
+				return nil
+			}
+			connWrite(conn, sendChan)
 		}
 	})
 
@@ -59,27 +76,15 @@ func main() {
 	g.Go(func() error {
 		for {
 			recive, _ := bufio.NewReader(conn).ReadString('\n')
-			fmt.Print("->: ")
-			outchan <- recive
+			reciveChan <- recive
+			for msg := range reciveChan {
+				fmt.Print("->: ")
+				fmt.Println(msg)
+			}
 		}
 	})
 
-	for {
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Print(">> ")
-		input, _ := reader.ReadString('\n')
-		fmt.Fprintf(conn, input+"\n")
-
-		msg, _ := bufio.NewReader(conn).ReadString('\n')
-		fmt.Print("->: " + msg)
-		switch strings.TrimSpace(string(input)) {
-		case "EXIT":
-			fmt.Println("TCP Client exiting...")
-			return
-		case "STOP":
-			fmt.Println("Send stop signal to TCP Server...")
-		case "SLEEP":
-			fmt.Println("Send sleep signal to TCP server...")
-		}
+	if err := g.Wait(); err != nil {
+		log.Printf("tcpclient main error: %v", err)
 	}
 }

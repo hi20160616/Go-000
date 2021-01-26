@@ -41,15 +41,39 @@ func (s *Server) Start(ctx context.Context) error {
 		if err != nil {
 			return err
 		}
-		fmt.Print("-> ", string(netData))
-		t := time.Now()
-		msg := "Server time: " + t.Format(time.RFC3339) + "\n" // msg prepare
-		c.Write([]byte(msg))                                   // send msg to client
+		netDataStr := string(netData)
+		fmt.Print("-> ", netDataStr)
+		switch netDataStr {
+		case "0":
+			fmt.Println("recive command: STOP")
+			s.Stop(ctx)
+		case "6":
+			fmt.Println("recive command: RESTART")
+			s.Restart(ctx)
+		default:
+			t := time.Now()
+			msg := "Server time: " + t.Format(time.RFC3339) + "\n" // msg prepare
+			c.Write([]byte(msg))                                   // send msg to client
+		}
 	}
 }
 
 func (s *Server) Stop(ctx context.Context) error {
-	log.Println("tcp server stopped.")
+	ctx, cancel := context.WithCancel(ctx)
+	log.Println("tcp server stop now...")
+	defer cancel()
+	return nil
+}
+
+func (s *Server) Restart(ctx context.Context) error {
+	fmt.Println("Stop tcp server...")
+	if err := s.Stop(ctx); err != nil {
+		return err
+	}
+	fmt.Println("Start tcp server...")
+	if err := s.Start(ctx); err != nil {
+		return err
+	}
 	return nil
 }
 
