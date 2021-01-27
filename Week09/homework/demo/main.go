@@ -16,6 +16,7 @@ func send(conn net.Conn, ch <-chan string) {
 func recive(conn net.Conn) {
 	sendChan := make(chan string, 8)
 	defer conn.Close()
+	defer close(sendChan)
 	go send(conn, sendChan)
 
 	scanner := bufio.NewScanner(conn)
@@ -31,17 +32,18 @@ func recive(conn net.Conn) {
 
 func main() {
 	l, err := net.Listen("tcp", ":123")
+	fmt.Println("Listen on TCP port 123...")
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	for {
 		conn, err := l.Accept()
+		fmt.Println("Recive 1 request")
 		if err != nil {
 			log.Println(err)
 			continue
 		}
 		go recive(conn)
-
 	}
 }
