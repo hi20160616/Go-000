@@ -38,6 +38,7 @@ func (s *Server) Start(ctx context.Context) error {
 		if err != nil {
 			return err
 		}
+		defer conn.Close()
 		scanner := bufio.NewScanner(conn)
 		for scanner.Scan() {
 			text := scanner.Text()

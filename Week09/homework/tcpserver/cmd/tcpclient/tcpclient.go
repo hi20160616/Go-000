@@ -26,6 +26,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+	defer conn.Close()
 
 	fmt.Println("Welcome to my dark side...")
 	ctx, cancel := context.WithCancel(context.Background())
