@@ -29,16 +29,16 @@ cd cmd/tcpserver && go build -o ../../bin/tcpserver && cd ../../ \
 		&& cd cmd/tcpclient && go build -o ../../bin/tcpclient && cd ../../
 ➜  tcpserver git:(main) ✗ l
 total 80
-drwxr-xr-x  10 wedojava  staff   320B  1 27 13:13 .
-drwxr-xr-x   4 wedojava  staff   128B  1 27 10:06 ..
--rw-r--r--   1 wedojava  staff    12K  1 27 13:13 .Makefile.swp
--rw-r--r--   1 wedojava  staff    12K  1 27 13:12 .README.md.swp
--rw-r--r--   1 wedojava  staff   192B  1 27 13:13 Makefile
--rw-r--r--   1 wedojava  staff   1.0K  1 27 13:12 README.md
-drwxr-xr-x   4 wedojava  staff   128B  1 27 13:13 bin
-drwxr-xr-x   4 wedojava  staff   128B  1 26 13:24 cmd
--rw-r--r--   1 wedojava  staff   133B  1 27 10:06 go.mod
--rw-r--r--   1 wedojava  staff   209B  1 27 10:06 go.sum
+drwxr-xr-x  10 foobar  staff   320B  1 27 13:13 .
+drwxr-xr-x   4 foobar  staff   128B  1 27 10:06 ..
+-rw-r--r--   1 foobar  staff    12K  1 27 13:13 .Makefile.swp
+-rw-r--r--   1 foobar  staff    12K  1 27 13:12 .README.md.swp
+-rw-r--r--   1 foobar  staff   192B  1 27 13:13 Makefile
+-rw-r--r--   1 foobar  staff   1.0K  1 27 13:12 README.md
+drwxr-xr-x   4 foobar  staff   128B  1 27 13:13 bin
+drwxr-xr-x   4 foobar  staff   128B  1 26 13:24 cmd
+-rw-r--r--   1 foobar  staff   133B  1 27 10:06 go.mod
+-rw-r--r--   1 foobar  staff   209B  1 27 10:06 go.sum
 ➜  tcpserver git:(main) ✗ make run
 ./bin/tcpserver
 Hi there, server working at  :12345
