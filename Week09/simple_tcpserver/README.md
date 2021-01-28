@@ -17,7 +17,7 @@ make run
 ```
 
 ```
-make test1
+make test
 ```
 
 ### Output
@@ -33,7 +33,7 @@ Exiting TCP server!
 
 Client
 ```
-make test1
+make test
 ./bin/tcpclient 127.0.0.1:1234
 >> Hello
 ->: 2021-01-25T12:51:49+08:00

@@ -22,17 +22,22 @@ func main() {
 		return
 	}
 
-	for {
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Print(">> ")
-		text, _ := reader.ReadString('\n')
-		fmt.Fprintf(c, text+"\n")
+	stdin := bufio.NewReader(os.Stdin)
+	rd := bufio.NewReader(c)
+	wr := bufio.NewWriter(c)
 
-		message, _ := bufio.NewReader(c).ReadString('\n')
-		fmt.Print("->: " + message)
-		if strings.TrimSpace(string(text)) == "STOP" {
-			fmt.Println("TCP client exiting...")
+	for {
+		fmt.Print(">> ")
+		input, _, _ := stdin.ReadLine()
+		wr.Write(input)
+		wr.WriteByte('\n')
+		wr.Flush()
+
+		recive, _, _ := rd.ReadLine()
+		if strings.TrimSpace(string(input)) == "STOP" {
+			fmt.Print("TCP client exiting...\n")
 			return
 		}
+		fmt.Printf("->: %s\n", recive)
 	}
 }

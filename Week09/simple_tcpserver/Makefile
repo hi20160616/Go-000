@@ -5,7 +5,5 @@ build:
 run:
 	./bin/tcpserver 1234
 
-test1:
+test:
 	./bin/tcpclient 127.0.0.1:1234
-test2:
-	./bin/greeter_client gopher

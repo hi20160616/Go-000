@@ -30,20 +30,22 @@ func main() {
 		return
 	}
 
+	rd := bufio.NewReader(c)
+	wr := bufio.NewWriter(c)
+
 	for {
-		netData, err := bufio.NewReader(c).ReadString('\n')
+		recive, _, err := rd.ReadLine()
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		if strings.TrimSpace(string(netData)) == "STOP" {
+		if strings.TrimSpace(string(recive)) == "STOP" {
 			fmt.Println("Exiting TCP server!")
 			return
 		}
 
-		fmt.Print("-> ", string(netData))
-		t := time.Now()
-		myTime := t.Format(time.RFC3339) + "\n"
-		c.Write([]byte(myTime))
+		fmt.Println("-> ", string(recive))
+		wr.WriteString(time.Now().Format(time.RFC3339) + "\n")
+		wr.Flush()
 	}
 }
